@@ -1,6 +1,6 @@
 @echo off
-echo Building main project...
-call mvn clean package -DskipTests
+echo ⚡ Building Main Project (Quiet Mode)...
+call mvn -q clean package -DskipTests
 if %ERRORLEVEL% NEQ 0 (
     echo.
     echo ❌ Maven build failed.
@@ -9,7 +9,7 @@ if %ERRORLEVEL% NEQ 0 (
 )
 
 echo.
-echo Running Benchmark...
+echo 🚀 Running Benchmark...
 call mvn -q -f examples/Benchmark/pom.xml compile
-call java -cp "target\fastglob-0.1.0.jar;examples\Benchmark\target\classes" fastglob.Benchmark
+call java --enable-native-access=ALL-UNNAMED -cp "target\fastglob-0.1.0.jar;examples\Benchmark\target\classes" fastglob.Benchmark
 pause
