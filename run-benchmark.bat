@@ -1,4 +1,4 @@
-﻿@echo off
+@echo off
 echo Building main project...
 call mvn clean package -DskipTests
 if %ERRORLEVEL% NEQ 0 (
@@ -10,7 +10,6 @@ if %ERRORLEVEL% NEQ 0 (
 
 echo.
 echo Running Benchmark...
-cd examples\Benchmark
-call mvn compile exec:java
-cd ..\..
+call mvn -q -f examples/Benchmark/pom.xml compile
+call java -cp "target\fastglob-1.0.0.jar;examples\Benchmark\target\classes" fastglob.Benchmark
 pause

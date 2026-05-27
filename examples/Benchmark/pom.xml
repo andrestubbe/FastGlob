@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -29,13 +29,11 @@
             <version>v0.1.0</version>
         </dependency>
         
-        <!-- Local System Path for Development -->
+        <!-- Production Mode: Official online JitPack release -->
         <dependency>
-            <groupId>io.github.andrestubbe</groupId>
-            <artifactId>fastglob</artifactId>
-            <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../../target/fastglob-1.0.0.jar</systemPath>
+            <groupId>com.github.andrestubbe</groupId>
+            <artifactId>FastGlob</artifactId>
+            <version>v1.0.0</version>
         </dependency>
     </dependencies>
     

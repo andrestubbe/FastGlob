@@ -1,40 +1,78 @@
-﻿package fastglob;
+package fastglob;
 
-import fastglob.FastGLOB;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.PathMatcher;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 /**
  * Performance Benchmark comparing FastGLOB to standard Java alternatives.
  */
 public class Benchmark {
-    public static void main(String[] args) {
-        System.out.println("=== FastGLOB Benchmark ===");
+    public static void main(String[] args) throws IOException {
+        System.out.println("=== FastGLOB Performance Benchmark ===");
         
-        FastGLOB api = new FastGLOB();
+        // Go up to the workspace root to traverse all projects (huge amount of files!)
+        Path searchRoot = Paths.get("..").toAbsolutePath().normalize();
+        String pattern = "**/*.java";
         
-        int iterations = 10000;
+        System.out.println("Traversing root: " + searchRoot);
+        System.out.println("Glob Pattern: " + pattern);
         
-        // 1. Benchmark Standard Java
-        long startJava = System.nanoTime();
-        for (int i = 0; i < iterations; i++) {
-            // Simulate standard java operation
-            Math.sqrt(i);
+        // Warmup
+        for (int i = 0; i < 3; i++) {
+            FastGLOB.glob(searchRoot.toString(), pattern);
+            runJavaGlob(searchRoot, "**/*.java");
         }
-        long javaTimeMs = (System.nanoTime() - startJava) / 1_000_000;
+        
+        int runs = 5;
+        System.out.println("\nRunning " + runs + " iterations...");
+        
+        // 1. Benchmark Standard Java NIO
+        long startJava = System.nanoTime();
+        int javaCount = 0;
+        for (int i = 0; i < runs; i++) {
+            javaCount = runJavaGlob(searchRoot, "**/*.java");
+        }
+        long javaTimeMs = (System.nanoTime() - startJava) / 1_000_000 / runs;
         
         // 2. Benchmark FastGLOB Native
         long startNative = System.nanoTime();
-        for (int i = 0; i < iterations; i++) {
-            // api.doSomethingNative();
-            Math.sqrt(i); // Placeholder
+        int nativeCount = 0;
+        for (int i = 0; i < runs; i++) {
+            String[] matches = FastGLOB.glob(searchRoot.toString(), pattern);
+            nativeCount = matches.length;
         }
-        long nativeTimeMs = (System.nanoTime() - startNative) / 1_000_000;
+        long nativeTimeMs = (System.nanoTime() - startNative) / 1_000_000 / runs;
         
-        System.out.println("Iterations: " + iterations);
-        System.out.println("Standard Java: " + javaTimeMs + " ms");
-        System.out.println("FastGLOB Native: " + nativeTimeMs + " ms");
+        System.out.println("\n=== Results ===");
+        System.out.println("Standard Java Matches: " + javaCount + " in " + javaTimeMs + " ms (avg)");
+        System.out.println("FastGLOB Matches:      " + nativeCount + " in " + nativeTimeMs + " ms (avg)");
         
         if (nativeTimeMs > 0) {
-            System.out.println("Speedup: " + (javaTimeMs / (float) nativeTimeMs) + "x");
+            float speedup = (float) javaTimeMs / nativeTimeMs;
+            System.out.printf("Speedup:               %.2fx faster! 🚀\n", speedup);
+        } else {
+            System.out.println("Speedup:               Infinite (Native was too fast to measure) 🚀");
+        }
+    }
+    
+    private static int runJavaGlob(Path root, String globPattern) throws IOException {
+        PathMatcher matcher = FileSystems.getDefault().getPathMatcher("glob:" + globPattern);
+        try (Stream<Path> stream = Files.find(root, Integer.MAX_VALUE,
+                (path, attr) -> {
+                    try {
+                        Path rel = root.relativize(path);
+                        return matcher.matches(rel);
+                    } catch (IllegalArgumentException e) {
+                        return false;
+                    }
+                })) {
+            return (int) stream.count();
         }
     }
 }
