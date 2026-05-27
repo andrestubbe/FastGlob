@@ -33,10 +33,28 @@ public class Demo {
 
 ---
 
+## Why FastGLOB?
+
+Java brings native globbing support via `java.nio.file.PathMatcher`, but it suffers from severe limitations in real-world, high-scale applications:
+
+1. **🚨 Severe GC Pressure:** Traversing millions of files via `Files.walk` or `Files.find` instantiates millions of temporary `Path`, `File`, and `String` objects, triggering heavy Garbage Collection pauses. FastGLOB executes traversal and matching entirely in native C++, returning only the final, filtered matches to the JVM.
+2. **🐌 Regular Expression Overhead:** Java's glob matcher compiles patterns into standard Java `Pattern` regex objects, which are slow and CPU-heavy when matched against millions of strings. FastGLOB uses hyper-optimized C++ wildcard algorithms.
+3. **🚫 Semantic Shortcomings:** Standard Java globbing is notorious for unintuitive behavior (e.g., `**/*.xml` failing to match files in the root directory) and lacks advanced, modern matching features.
+
+### ✨ Semantic Superiority
+FastGLOB is not just faster; it is semantically superior and developer-friendly:
+- **Gitignore-Compatible Syntax:** Matches patterns exactly as developers expect from `.gitignore`.
+- **Brace Expansion:** Full support for alternative groupings (e.g., `*.{java,cpp,h}`).
+- **Negation Support:** Exclude paths directly in the pattern (e.g., `!**/target/**`).
+- **Consistent Double-Star (`**`):** Flawless recursive matching, including root-level files.
+
+---
+
 ## Key Features
--   **🚀 Native Performance** — Direct Win32/DirectX access via JNI.
--   **⚡ Zero Overhead** — No polling, purely event-driven callbacks.
--   **📦 Zero Dependencies** — Just requires Java 17+ and Windows.
+- **🚀 Native Performance** — Direct Win32 API access using native thread pools and lightweight directory queries (`NtQueryDirectoryFile`).
+- **⚡ Zero GC Bloat** — Traversal, filtering, and glob matching happen entirely in C++; only matching results enter the JVM heap.
+- **🛠️ Advanced Semantics** — Brace expansion, negation, and full `.gitignore` syntax compatibility.
+- **📦 Zero Dependencies** — Just requires Java 17+ and Windows.
 
 ---
 
