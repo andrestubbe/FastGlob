@@ -1,4 +1,4 @@
-﻿#ifndef FASTXXX_H
+#ifndef FASTXXX_H
 #define FASTXXX_H
 
 #include <jni.h>
@@ -8,7 +8,7 @@ extern "C" {
 #endif
 
 // Export declarations (Matches fastglob.def)
-JNIEXPORT void JNICALL Java_fastglob_FastGLOB_doSomethingNative(JNIEnv* env, jobject obj);
+JNIEXPORT jobjectArray JNICALL Java_fastglob_FastGLOB_glob(JNIEnv* env, jclass clazz, jstring baseDir, jstring pattern);
 
 #ifdef __cplusplus
 }

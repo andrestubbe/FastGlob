@@ -1,10 +1,10 @@
-﻿package fastglob;
+package fastglob;
 
 import fastcore.FastCore;
 
 /**
  * FastGLOB Main API Class.
- * Native Windows capabilities exposed via JNI.
+ * Native Windows capabilities exposed via JNI for high-performance globbing.
  */
 public class FastGLOB {
 
@@ -14,8 +14,12 @@ public class FastGLOB {
     }
 
     /**
-     * Executes the native capability via C++.
+     * Traverses the specified base directory and returns all file paths matching the glob pattern.
+     * 
+     * @param baseDir The root directory to start searching
+     * @param pattern The glob pattern
+     * @return Array of matching relative file paths.
      */
-    public native void doSomethingNative();
+    public static native String[] glob(String baseDir, String pattern);
 
 }
