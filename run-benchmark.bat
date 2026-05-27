@@ -8,7 +8,6 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b %ERRORLEVEL%
 )
 
-echo.
 echo 🚀 Running Benchmark...
 call mvn -q -f examples/Benchmark/pom.xml compile
 call java --enable-native-access=ALL-UNNAMED -cp "target\fastglob-0.1.0.jar;examples\Benchmark\target\classes" fastglob.Benchmark
