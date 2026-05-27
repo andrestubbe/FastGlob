@@ -12,11 +12,15 @@
 
 ```java
 // Quick Start — Example
-import fastxxx.FastGLOB;
+import fastglob.FastGLOB;
 
 public class Demo {
     public static void main(String[] args) {
-        // Your code here
+        // Native Win32 glob search for all Java files in the current directory
+        String[] files = FastGLOB.glob(".", "**/*.java");
+        for (String file : files) {
+            System.out.println("Found: " + file);
+        }
     }
 }
 ```
@@ -139,12 +143,12 @@ Download the latest pre-compiled JARs directly to add them to your project's cla
 ---
 
 ## Technical Examples & Hero Demos
-See the `examples/` directory for technical implementations and high-speed races:
+See the `examples/` directory for technical implementations and performance races:
 
-| Case | Java Example | Performance Race / Demo | JMH Benchmark |
-|------|--------------|-------------------------|---------------|
-| Feature A | [ExampleA.java](examples/src/main/java/fastxxx/ExampleA.java) | [“Hero Demo A”](https://youtube.com) | [JMH_A.java](examples/src/main/java/fastxxx/benchmark/JMH_A.java) |
-| Feature B | [ExampleB.java](examples/src/main/java/fastxxx/ExampleB.java) | — | — |
+| Case | Java Example / Demo | JMH Benchmark / Race |
+|------|---------------------|----------------------|
+| **Pattern Matcher** | [Demo.java](examples/Demo/src/main/java/fastglob/Demo.java) | — |
+| **Directory Search Performance** | — | [Benchmark.java](examples/Benchmark/src/main/java/fastglob/Benchmark.java) |
 
 ---
 

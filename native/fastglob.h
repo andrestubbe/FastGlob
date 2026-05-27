@@ -1,5 +1,5 @@
-#ifndef FASTXXX_H
-#define FASTXXX_H
+#ifndef FASTGLOB_H
+#define FASTGLOB_H
 
 #include <jni.h>
 
@@ -14,4 +14,4 @@ JNIEXPORT jobjectArray JNICALL Java_fastglob_FastGLOB_glob(JNIEnv* env, jclass c
 }
 #endif
 
-#endif // FASTXXX_H
+#endif // FASTGLOB_H
